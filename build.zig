@@ -81,6 +81,13 @@ pub fn build(b: *std.Build) void {
             "Path to Vulkan Headers",
         ),
     };
+    const build_options = .{
+        .sdl3_include_path = b.option(
+            std.Build.LazyPath,
+            "sdl3_include_path",
+            "External SDL3 include directory to use instead of the optional zsdl dependency",
+        ),
+    };
 
     const options_step = b.addOptions();
     inline for (std.meta.fields(@TypeOf(options))) |field| {
@@ -412,9 +419,7 @@ pub fn build(b: *std.Build) void {
             });
         },
         .sdl3_gpu => {
-            if (b.lazyDependency("zsdl", .{})) |zsdl| {
-                imgui_mod.addIncludePath(zsdl.path("libs/sdl3/include"));
-            }
+            addSdl3IncludePath(b, imgui_mod, build_options.sdl3_include_path);
             imgui_mod.addCSourceFiles(.{
                 .files = &.{
                     "libs/imgui/backends/imgui_impl_sdl3.cpp",
@@ -424,9 +429,7 @@ pub fn build(b: *std.Build) void {
             });
         },
         .sdl3_renderer => {
-            if (b.lazyDependency("zsdl", .{})) |zsdl| {
-                imgui_mod.addIncludePath(zsdl.path("libs/sdl3/include"));
-            }
+            addSdl3IncludePath(b, imgui_mod, build_options.sdl3_include_path);
             imgui_mod.addCSourceFiles(.{
                 .files = &.{
                     "libs/imgui/backends/imgui_impl_sdl3.cpp",
@@ -436,9 +439,7 @@ pub fn build(b: *std.Build) void {
             });
         },
         .sdl3_opengl3 => {
-            if (b.lazyDependency("zsdl", .{})) |zsdl| {
-                imgui_mod.addIncludePath(zsdl.path("libs/sdl3/include/SDL3"));
-            }
+            addSdl3IncludePath(b, imgui_mod, build_options.sdl3_include_path);
             imgui_mod.addCSourceFiles(.{
                 .files = &.{
                     "libs/imgui/backends/imgui_impl_sdl3.cpp",
@@ -448,9 +449,7 @@ pub fn build(b: *std.Build) void {
             });
         },
         .sdl3_vulkan => {
-            if (b.lazyDependency("zsdl", .{})) |zsdl| {
-                imgui_mod.addIncludePath(zsdl.path("libs/sdl3/include"));
-            }
+            addSdl3IncludePath(b, imgui_mod, build_options.sdl3_include_path);
             const sdk_env = b.graph.environ_map.get("VULKAN_SDK");
             if (options.vulkan_include) |path| {
                 imgui_mod.addSystemIncludePath(.{ .cwd_relative = path });
@@ -476,9 +475,7 @@ pub fn build(b: *std.Build) void {
             });
         },
         .sdl3 => {
-            if (b.lazyDependency("zsdl", .{})) |zsdl| {
-                imgui_mod.addIncludePath(zsdl.path("libs/sdl3/include"));
-            }
+            addSdl3IncludePath(b, imgui_mod, build_options.sdl3_include_path);
             imgui_mod.addCSourceFiles(.{
                 .files = &.{
                     "libs/imgui/backends/imgui_impl_sdl3.cpp",
@@ -516,4 +513,19 @@ pub fn build(b: *std.Build) void {
     tests.root_module.linkLibrary(imgui);
 
     test_step.dependOn(&b.addRunArtifact(tests).step);
+}
+
+fn addSdl3IncludePath(
+    b: *std.Build,
+    imgui_mod: *std.Build.Module,
+    sdl3_include_path: ?std.Build.LazyPath,
+) void {
+    if (sdl3_include_path) |path| {
+        imgui_mod.addIncludePath(path);
+        return;
+    }
+
+    if (b.lazyDependency("zsdl", .{})) |zsdl| {
+        imgui_mod.addIncludePath(zsdl.path("libs/sdl3/include"));
+    }
 }

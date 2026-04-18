@@ -27,11 +27,6 @@
             .hash = "zgpu-0.12.0-dev-nqFT5OOmCABcwCeEje63Wohd7SqQ73CbPqZzmuqArpgF",
             .lazy = true,
         },
-        .zsdl = .{
-            .url = "https://github.com/zig-gamedev/zsdl/archive/537de39b5719f39dcd612df2923607f3aedaf147.tar.gz",
-            .hash = "zsdl-0.4.0-dev-rFpjEzgIXwBdDmlda0YnQPRVApMc1YEgbyzLWuT9GupM",
-            .lazy = true,
-        },
         .freetype = .{
             .url = "https://github.com/loftafi/freetype/archive/3c32c471fd01a4940c0674c064ffe396b16f3b54.tar.gz",
             .hash = "freetype-0.0.2-PphdeW1JcwDJPUwi8dE737-jVnUMUPGMC3wNK_gVdpjS",
