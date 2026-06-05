@@ -4011,7 +4011,6 @@ pub const tabItemButton = zguiTabItemButton;
 //
 //--------------------------------------------------------------------------------------------------
 pub const ViewportFlags = packed struct(c_int) {
-    none: bool = false,
     is_platform_window: bool = false,
     is_platform_monitor: bool = false,
     owned_by_app: bool = false,
@@ -4026,7 +4025,7 @@ pub const ViewportFlags = packed struct(c_int) {
     can_host_other_windows: bool = false,
     is_minimized: bool = false,
     is_focused: bool = false,
-    _: u17 = 0,
+    _: u18 = 0,
 };
 
 pub const Viewport = extern struct {
