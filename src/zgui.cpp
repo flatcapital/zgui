@@ -39,6 +39,11 @@ extern "C"
         ImGui::SetNextWindowViewport(viewport_id);
     }
 
+    ZGUI_API void zguiSetNextWindowClass(const ImGuiWindowClass *window_class)
+    {
+        ImGui::SetNextWindowClass(window_class);
+    }
+
     ZGUI_API void zguiSetNextWindowPos(float x, float y, ImGuiCond cond, float pivot_x, float pivot_y)
     {
         ImGui::SetNextWindowPos({x, y}, cond, {pivot_x, pivot_y});

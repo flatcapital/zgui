@@ -801,6 +801,49 @@ pub fn setNextWindowViewport(viewport_id: Ident) void {
 }
 extern fn zguiSetNextWindowViewport(viewport_id: Ident) void;
 //--------------------------------------------------------------------------------------------------
+pub const WindowClass = extern struct {
+    class_id: Ident,
+    parent_viewport_id: Ident,
+    focus_route_parent_window_id: Ident,
+    viewport_flags_override_set: ViewportFlags,
+    viewport_flags_override_clear: ViewportFlags,
+    tab_item_flags_override_set: TabItemFlags,
+    dock_node_flags_override_set: DockNodeFlags,
+    docking_always_tab_bar: bool,
+    docking_allow_unclassed: bool,
+
+    pub const Init = struct {
+        class_id: Ident = 0,
+        parent_viewport_id: Ident = std.math.maxInt(Ident),
+        focus_route_parent_window_id: Ident = 0,
+        viewport_flags_override_set: ViewportFlags = .{},
+        viewport_flags_override_clear: ViewportFlags = .{},
+        tab_item_flags_override_set: TabItemFlags = .{},
+        dock_node_flags_override_set: DockNodeFlags = .{},
+        docking_always_tab_bar: bool = false,
+        docking_allow_unclassed: bool = true,
+    };
+
+    pub fn init(args: Init) WindowClass {
+        return .{
+            .class_id = args.class_id,
+            .parent_viewport_id = args.parent_viewport_id,
+            .focus_route_parent_window_id = args.focus_route_parent_window_id,
+            .viewport_flags_override_set = args.viewport_flags_override_set,
+            .viewport_flags_override_clear = args.viewport_flags_override_clear,
+            .tab_item_flags_override_set = args.tab_item_flags_override_set,
+            .dock_node_flags_override_set = args.dock_node_flags_override_set,
+            .docking_always_tab_bar = args.docking_always_tab_bar,
+            .docking_allow_unclassed = args.docking_allow_unclassed,
+        };
+    }
+};
+
+pub fn setNextWindowClass(window_class: WindowClass) void {
+    zguiSetNextWindowClass(&window_class);
+}
+extern fn zguiSetNextWindowClass(window_class: *const WindowClass) void;
+//--------------------------------------------------------------------------------------------------
 const SetNextWindowPos = struct {
     x: f32,
     y: f32,
